@@ -1,0 +1,32 @@
+name: Flutter Build (Debug)
+
+on:
+  push:
+    branches: [ "main" ]
+  workflow_dispatch:
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Set up Flutter
+        uses: subosito/flutter-action@v2
+        with:
+          channel: stable
+          version: "3.5.2"  # 確保 Dart 3.5
+
+      - name: Install dependencies
+        run: flutter pub get
+
+      - name: Build APK (Debug)
+        run: flutter build apk  # debug build，快速測試
+
+      - name: Upload artifact
+        uses: actions/upload-artifact@v4
+        with:
+          name: app-debug
+          path: build/app/outputs/flutter-apk/app-debug.apk
