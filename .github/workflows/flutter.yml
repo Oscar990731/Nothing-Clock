@@ -1,0 +1,36 @@
+name: Flutter Build (Release)
+
+on:
+  push:
+    branches: [ "main" ]
+  workflow_dispatch:
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+
+    steps:
+      # 1️⃣ Checkout 專案
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      # 2️⃣ 安裝 Flutter（stable channel，不指定版本）
+      - name: Set up Flutter
+        uses: subosito/flutter-action@v2
+        with:
+          channel: stable
+
+      # 3️⃣ 安裝專案依賴
+      - name: Install dependencies
+        run: flutter pub get
+
+      # 4️⃣ Build APK（Release）
+      - name: Build APK (Release)
+        run: flutter build apk --release
+
+      # 5️⃣ 上傳 APK Artifact
+      - name: Upload artifact
+        uses: actions/upload-artifact@v4
+        with:
+          name: app-release
+          path: build/app/outputs/flutter-apk/app-release.apk
